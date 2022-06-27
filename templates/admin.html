@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% extends 'base.html' %}
+
+    <script> 
+        $(document).ready(function() {
+            $('.form-control').select2();
+        });
+    </script>
+
+    {% block content %}
+        <h1>{% block title %} Gestion de budget {% endblock %}</h1>
+        <hr>
+
+    <form method="post" class="row gy-2 gx-3 align-items-center">
+
+            <div class="input-group">
+                <div class="form-control">
+                    <label for="autoSizingSelect" style="text-align:left;">Ajouter un type de transaction : </label> 
+                        <input type = "text" name = "new_type" id = "new_type" placeholder="Nouveau type" style="width:auto;"></input>
+                </div>
+    
+                <div class="input-group-btn">
+                    <input type="submit" class="btn btn-secondary btn-lg" name="submit_button" value="Ajouter le type">
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="form-control">
+                    <label for="autoSizingSelect" style="text-align:left;">Ajouter une catégorie de transaction : </label> 
+                        <input type = "text" name = "new_class" id = "new_class" placeholder="Nouvelle catégorie" style="width:auto;"></input>
+                </div>
+    
+                <div class="input-group-btn">
+                    <input type="submit" class="btn btn-secondary btn-lg" name="submit_button" value="Ajouter la catégorie">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="form-control">
+                    <label for="autoSizingSelect" style="text-align:left;">Ajouter un destinataire : </label> 
+                        <input type = "text" name = "new_recipient" id = "new_recipient" placeholder="Nouveau destinataire" style="width:auto;"></input>
+                </div>
+    
+                <div class="input-group-btn">
+                    <input type="submit" class="btn btn-secondary btn-lg" name="submit_button" value="Ajouter le destinataire">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="form-control">
+                    <label for="autoSizingSelect" style="text-align:left;">Ajouter un expéditeur : </label> 
+                        <input type = "text" name = "new_sender" id = "new_sender" placeholder="Nouveau destinataire" style="width:auto;"></input>
+                </div>
+    
+                <div class="input-group-btn">
+                    <input type="submit" class="btn btn-secondary btn-lg" name="submit_button" value="Ajouter l'expéditeur">
+                </div>
+            </div>
+
+    </form>
+
+{% endblock %}
+</html>

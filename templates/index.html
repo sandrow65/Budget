@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% extends 'base.html' %}
+
+    <script> 
+        $(document).ready(function() {
+        $('.form-control').select2();
+        });
+    </script>
+
+    {% block content %}
+        <h1>{% block title %} Gestion de budget {% endblock %}</h1>
+        <hr>
+
+    <form method="post" class="row gy-4 gx-4 align-items-center">
+
+        <div class="input-group">
+            <div class="form-control">
+                <label for="autoSizingSelect" style="text-align:left;">Sélectionner un projet :  </label> 
+                    <select name="project" id="sel_project" class = "selectpicker form-control-sm" searchable = "Search..." style="width:auto;">
+                        <option hidden disabled selected value>Sélectionner...</option>
+                        {% for project in projects %}
+                        <option value="{{project[0]}}">{{project[0]}}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+            <div class="input-group-btn">
+                <input type="submit" class="btn btn-secondary btn-lg" name="submit_button" id="select_button" value="Sélectionner">
+            </div>
+
+        </div>
+
+        <div class="input-group">
+            <div class="form-control">
+                <label for="autoSizingSelect" style="text-align:left;">Créer un nouveau projet : </label> 
+                    <input type = "text" name = "new_project" id = "new_project" placeholder="Nom du projet" style="width:auto;"></input>
+            </div>
+
+            <div class="input-group-btn">
+                <input type="submit" class="btn btn-secondary btn-lg" name="submit_button" value="Créer">
+            </div>
+        </div>
+
+        <hr>
+
+        <input type="submit" class="btn btn-secondary btn-lg" name="submit_button" value="Gérer">
+        
+    </form>
+
+    
+
+<script language="javascript">
+    $("#select_button").hide();
+    $("#sel_project").change(function(){
+        if ($(this).val()) {
+            $("#select_button").show();
+        } else {
+            $("#select_button").hide();
+        }
+    }).trigger('change');
+</script>
+
+{% endblock %}
+</html>

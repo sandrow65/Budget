@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% extends 'base.html' %}
+
+    <script> 
+        $(document).ready(function() {
+            $('.form-control').select2();
+            document.getElementById("defaultOpen").click();
+        });
+    </script>
+
+    {% block content %}
+        <h1>{% block title %} Gestion de budget {% endblock %}</h1>
+        <hr>
+        <h2>
+            {{project_name}}
+        </h2>
+
+    <form method="post" class="row gy-2 gx-3 align-items-center">
+
+
+        <div class="row g-3">
+            <div class="col">
+                <label for="autoSizingSelect" style="text-align:right;">Date de la transaction :</label>
+                <input type="date" name="transaction_date"
+                placeholder="Saisir la date" class="form-control"
+                style="text-align:center;"
+                value="{{ request.form['transaction_date'] }}">
+            </div>
+
+            <div class="col">
+                <label for="autoSizingSelect" style="text-align:right;">Type de transaction :</label>
+                <select name="transaction_type" class = "selectpicker form-control" searchable = "Search..." style="width:auto;">
+                    <option hidden disabled selected value>Sélectionner...</option>
+                    {% for trans_type in transaction_types %}
+                    <option value="{{trans_type[0]}}">{{trans_type[0]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col">
+                <label for="autoSizingSelect" style="text-align:right;">Catégorie :</label>
+                <select name="transaction_class" class = "selectpicker form-control" searchable = "Search..." style="width:auto;">
+                    <option hidden disabled selected value>Sélectionner...</option>
+                    {% for trans_class in transaction_classes %}
+                    <option value="{{trans_class[0]}}">{{trans_class[0]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="row g-2">
+            <div class="col-sm-3">
+                <label for="autoSizingSelect" style="text-align:right;">Expéditeur :</label>
+                <select name="transaction_sender" class = "selectpicker form-control" searchable = "Search..." style="width:auto;">
+                    <option hidden disabled selected value>Sélectionner...</option>
+                    {% for sender in transaction_sender %}
+                    <option value="{{sender[0]}}">{{sender[0]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-sm-3">
+                <label for="autoSizingSelect" style="text-align:right;">Destinataire :</label>
+                <select name="transaction_recipient" class = "selectpicker form-control" searchable = "Search..." style="width:auto;">
+                    <option hidden disabled selected value>Sélectionner...</option>
+                    {% for recipient in transaction_recipient %}
+                    <option value="{{recipient[0]}}">{{recipient[0]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col">
+                <label for="autoSizingSelect" style="text-align:right;">Nom de la transaction :</label>
+                <input type="text" name="transaction_name"
+                placeholder="Saisir le nom" class="form-control"
+                style="text-align:center;"
+                value="{{ request.form['transaction_name'] }}">
+            </div>
+            <div class="col">
+                <label for="autoSizingSelect" style="text-align:right;">Montant :</label>
+                <input type="float" name="transaction_value"
+                placeholder="Saisir le montant" class="form-control"
+                style="text-align:center;"
+                value="{{ request.form['transaction_value'] }}">
+            </div>
+
+            <div class="col-sm-3" style="text-align:right;">
+                <input type="submit" 
+                class="btn btn-secondary btn-lg" 
+                name="submit_button" id="submit_button" value="Ajouter une transaction">
+            </div>
+
+        </div>
+
+    </form>
+
+    <hr>
+
+    <div class = "tab">
+        <button class="tablinks" onClick="openTab('list', this)" id = "defaultOpen">Liste des transactions</button>
+        <button class="tablinks" onClick="openTab('graph', this)">Graphiques</button>
+    </div>
+
+    <div id="list" class="tabcontent">
+        <div class="col-sm-3">
+            <label for="autoSizingSelect" style="text-align:right;">Mois recherché :</label>
+            <select name="transaction_month" onchange="Search()" id = "selectedMonth" class = "selectpicker form-control" searchable = "Search..." style="width:auto;">
+                <option hidden disabled selected value>Sélectionner...</option>
+                {% for month in transaction_month %}
+                <option value="{{month[0]}}">{{month[0]}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="height:300px; overflow-y: scroll;">
+            <table id = "transactionsList" class="table table-light table-stripped">
+                <thead>
+                    <tr>
+                        <th scope = "col">Date</th>
+                        <th scope = "col">Type</th>
+                        <th scope = "col">Nom</th>
+                        <th scope = "col">Destinataire</th>
+                        <th scope = "col">Montant</th>
+                        <!-- <th scope = "col">Destinara</th> -->
+        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transaction_list %}
+                        <tr>
+                            <td>{{transaction[1]}}</td>
+                            <td>{{transaction[4]}}</td>
+                            <td>{{transaction[5]}}</td>
+                            <td>{{transaction[8]}}</td>
+                            <td>{{transaction[6]}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+
+    <div id="graph" class = "tabcontent">
+        <img src="{{url_for('static', filename='/images/'+ file_name + '.png')}}" style="height: 300px;border: none; ">
+    </div>
+    
+
+<script language="javascript">
+
+    
+
+    // $("#submit_button").hide();
+    $("#transaction_value").keyup(function(){
+        if ($(this).val()) {
+            $("#submit_button").show();
+        } else {
+            $("#submit_button").hide();
+        }
+    });
+    function openTab(pageName, elmnt) {
+        // Hide all elements with class="tabcontent" by default */
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Remove the background color of all tablinks/buttons
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+
+        // Show the specific tab content
+        document.getElementById(pageName).style.display = "block";
+
+        // Add the specific color to the button used to open the tab content
+        elmnt.style.backgroundColor = color;
+        }
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click(); 
+    function Search(){
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("selectedMonth");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("transactionsList");
+        tr = table.getElementsByTagName("tr");
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            console.log("td" + td);
+            if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+    }
+  }
+    }
+</script>
+
+{% endblock %}
+</html>
