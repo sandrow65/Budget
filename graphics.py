@@ -19,14 +19,14 @@ sns.set(font_scale=7)
 def get_bars(project_name):
     con = sqlite3.connect(config.PATH_TO_DB)
     cur = con.cursor()
-    sql = '''SELECT DATE, VALUE FROM PROJECT_DATA WHERE PROJECT_NAME = ? AND TYPE = ? ORDER BY DATE DESC'''
+    sql = '''SELECT DATE, VALUE FROM PROJECT_DATA WHERE PROJECT_NAME = ? AND TYPE = ? ORDER BY DATE'''
     positive_transactions = pd.DataFrame(cur.execute(sql, [project_name, 'Crédit']).fetchall(), columns = ['Date', 'Recettes'])
     negative_transactions = pd.DataFrame(cur.execute(sql, [project_name, 'Débit']).fetchall(), columns = ['Date', 'Dépenses'])
 
 
     df = pd.concat([positive_transactions, negative_transactions], axis=0)
     df['Date'] = pd.to_datetime(df['Date'],format="%Y-%m-%d")
-    df = df.sort_values(by='Date', ascending=True)
+    # df = df.sort_values(by='Date', ascending=True)
     df['Date'] = df['Date'].dt.strftime('%B %Y')
 
     df['Recettes'] = df['Recettes'].fillna(0)
@@ -36,9 +36,9 @@ def get_bars(project_name):
 
     df = df.set_index('Date')
 
-    df_agg = df.sum(level='Date')
+    df_agg = df.groupby(level='Date', sort=False).sum()
     df_agg = df_agg.reset_index()
-    # df_agg = df_agg.sort_values(by=['Date'], axis = 0, ascending = 1)
+    # df_agg = df_agg.sort_values(by=['Date'], axis = 0, ascending = 0)
 
     print(df, '\n', df_agg)
 
@@ -61,7 +61,7 @@ def get_bars(project_name):
         ax.annotate(f'{v:n}', xy=(i, v + 10), color='blue', fontsize=100) 
     cwd = os.getcwd()
     filename = 'plot_data_' + str.replace(project_name, ' ', '_')
-    url = cwd + '\static\images\{}.png'.format(filename)
+    url = cwd + '/static/images/{}.png'.format(filename)
     plt.savefig(url, transparent=True, format='png')
 
     print("graphics ok")
