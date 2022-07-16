@@ -10,6 +10,7 @@
     </script>
 
     {% block content %}
+<div class="container-fluid">
         <h1>{% block title %} Gestion de budget {% endblock %}</h1>
         <hr>
         <h2>
@@ -146,7 +147,7 @@
     <div id="graph" class = "tabcontent">
         <img src="{{url_for('static', filename='/images/'+ file_name + '.png')}}" style="height: 300px;border: none; ">
     </div>
-    
+</div>    
 
 <script language="javascript">
 

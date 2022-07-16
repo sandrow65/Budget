@@ -1,5 +1,9 @@
 
-from flask import Flask, render_template, request, url_for, flash, redirect, send_from_directory, send_file
+from flask import Blueprint, Flask, render_template, request, url_for, flash, redirect, send_from_directory, send_file
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import current_user, login_user, login_required, logout_user
+from models import User
+import auth, init_app
 
 import navigation, graphics
 
@@ -11,18 +15,14 @@ b=os.getcwd()
 os.system(f"echo '{b}'> test")
 # locale.setlocale(locale.LC_ALL, 'fr_FR.utf-8')
 
-app = Flask(__name__)
-app.templates_auto_reload = True
+app = init_app.create_app()
 
-@app.route('/login')
-def login(): 
-    return render_template('login.html')
-
-@app.route('/signup')
-def signup(): 
-    return render_template('signup.html')
+@app.before_first_request
+def create_tables():
+    init_app.db.create_all()
 
 @app.route('/', methods=('GET', 'POST'))
+@login_required
 def index():
     
     project_list = navigation.list_projects()
@@ -45,6 +45,7 @@ def index():
 
 @app.route('/project/<project_name>', methods=('GET', 'POST'))
 @app.route('/project', defaults={'project_name': None}) 
+@login_required
 def project(project_name):
     print("ok")
 
@@ -72,6 +73,7 @@ def project(project_name):
                 file_name = filename)
 
 @app.route('/admin', methods=('GET', 'POST'))
+@login_required
 def admin():
     if request.method in ('POST'):
         if request.form['submit_button'] == "Ajouter le type":
