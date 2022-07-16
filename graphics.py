@@ -30,9 +30,9 @@ def get_bars(project_name):
     df['Date'] = df['Date'].dt.strftime('%B %Y')
 
     df['Recettes'] = df['Recettes'].fillna(0)
-    df['Dépenses'] = df['Dépenses'].fillna(0)
+    df['Dépenses'] = - df['Dépenses'].fillna(0)
 
-    df['Reste'] = df['Recettes'] - df['Dépenses']
+    df['Reste'] = df['Recettes'] + df['Dépenses']
 
     df = df.set_index('Date')
 
@@ -40,32 +40,80 @@ def get_bars(project_name):
     df_agg = df_agg.reset_index()
     # df_agg = df_agg.sort_values(by=['Date'], axis = 0, ascending = 0)
 
-    print(df, '\n', df_agg)
-
     ## plot
     sns.set_style('darkgrid', {"grid.color": ".6", "grid.linestyle": ":", "fontsize":"1000"})
     fig = plt.figure(figsize=(80,30))
     ax = fig.add_subplot(111)
-    b1 = sns.barplot(data=df_agg, x='Date', y='Recettes', color='green', alpha=0.7, ax=ax, label='big')
+    b1 = sns.barplot(data=df_agg, x='Date', y='Recettes', color='royalblue', alpha=0.7, ax=ax, label='big')
 
-    b2 = sns.barplot(data=df_agg, x='Date', y='Dépenses', color='red', alpha=0.7, ax=ax, label='big')
+    b2 = sns.barplot(data=df_agg, x='Date', y='Dépenses', color='darkred', alpha=0.7, ax=ax, label='big')
 
     # df_agg.plot.bar(x='Date', y=['Recettes','Dépenses'], color={'Recettes':'green', 'Dépenses':'red'}, logy=True, ax=ax,
     #                 legend=False, alpha=0.7, rot=0)
-    sns.lineplot(data=df_agg, x='Date', y='Reste', color='blue', legend=False, linewidth=2, linestyle='dashed', marker='*', markersize=12)
+    sns.lineplot(data=df_agg, x='Date', y='Reste', color='white', legend=False, linewidth=2, linestyle='dashed', marker='*', markersize=12)
     # df_agg.plot.line(x='Date', y='Reste',  color='blue', ax=ax,
     #                 legend=False, linewidth=2, linestyle='dashed', marker='*', markersize=12)
     for i in range(df_agg.shape[0]):
         v = df_agg.iloc[i]['Reste']
         y_lvl = df_agg.iloc[i]['Dépenses']
-        ax.annotate(f'{v:n}', xy=(i, v + 10), color='blue', fontsize=100) 
+        ax.annotate(f'{v:n}', xy=(i, v + 10), color='white', fontsize=90) 
     cwd = os.getcwd()
     filename = 'plot_data_' + str.replace(project_name, ' ', '_')
     url = cwd + '/static/images/{}.png'.format(filename)
+    total_eco = int(df['Reste'].sum())
+    # plt.figure()
+    plt.title('Bilan des recettes-dépenses \n Total économisé : ' + str(total_eco) + ' €\n', color='white')
     plt.savefig(url, transparent=True, format='png')
-
-    print("graphics ok")
+    plt.clf()
 
     con.commit()
     con.close()
+    return url, filename
+
+def get_piechart(project_name, month = None):
+
+    if month is None :
+        con = sqlite3.connect(config.PATH_TO_DB)
+        cur = con.cursor()
+
+        sql = '''SELECT CLASS, SUM(VALUE) FROM PROJECT_DATA WHERE PROJECT_NAME = ? AND TYPE = ? GROUP BY CLASS ORDER BY SUM(VALUE) DESC LIMIT 10'''
+        transactions = pd.DataFrame(cur.execute(sql, [project_name, 'Débit']).fetchall(), columns = ['Catégorie', 'Montant'])
+
+        cwd = os.getcwd()
+        filename = 'plot_categories_' + str.replace(project_name, ' ', '_')
+        url = cwd + '/static/images/{}.png'.format(filename)
+
+        colors = sns.color_palette('flare', 10)
+        # plt.figure()
+        plt.pie(transactions['Montant'], labels=transactions['Catégorie'], colors=colors, autopct='%.0f%%', textprops = {'color':'white'})
+        plt.title("Top 10 des dépenses sur la période", color='white')
+        plt.savefig(url, transparent=True, format='png')
+        plt.clf()
+
+        con.commit()
+        con.close()
+        
+    else :
+
+        month_date_object = datetime.strptime(month,'%B %Y')
+
+        con = sqlite3.connect(config.PATH_TO_DB)
+        cur = con.cursor()
+
+        sql = '''SELECT CLASS, SUM(VALUE) FROM PROJECT_DATA WHERE PROJECT_NAME = ? AND TYPE = ? AND cast(strftime('%m', DATE) as int) = ? AND cast(strftime('%Y', DATE) as int) = ? GROUP BY CLASS ORDER BY SUM(VALUE) DESC LIMIT 10'''
+        transactions_in_month = pd.DataFrame(cur.execute(sql, [project_name, 'Débit', int(month_date_object.month), int(month_date_object.year)]).fetchall(), columns = ['Catégorie', 'Montant'])
+        cwd = os.getcwd()
+        filename = 'plot_categories_' + str.replace(project_name, ' ', '_')
+        url = cwd + '/static/images/{}.png'.format(filename)
+
+        colors = sns.color_palette('flare', 10)
+        # plt.figure()
+        plt.pie(transactions_in_month['Montant'], labels=transactions_in_month['Catégorie'], colors=colors, autopct='%.0f%%', textprops = {'color':'white'})
+        plt.title("Top 10 des dépenses sur la période", color='white')
+        plt.savefig(url, transparent=True, format='png')
+        plt.clf()
+
+        con.commit()
+        con.close()
+        
     return url, filename

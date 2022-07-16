@@ -42,7 +42,6 @@ def get_project_data(project_name):
         date_int = datetime.strptime(list_i[1], '%Y-%m-%d')
         list_i[1] = datetime.strftime(date_int, "%d %B %Y")
         transactions_list[i] = tuple(list_i)
-    #datetime.strftime(datetime.strptime(transaction_date, '%Y-%m-%d'), "%d %B %Y"),
     con.commit()
     con.close()
 

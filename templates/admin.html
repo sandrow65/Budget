@@ -9,6 +9,7 @@
     </script>
 
     {% block content %}
+<div class="container-fluid">
         <h1>{% block title %} Gestion de budget {% endblock %}</h1>
         <hr>
 
@@ -56,8 +57,11 @@
                     <input type="submit" class="btn btn-secondary btn-lg" name="submit_button" value="Ajouter l'expéditeur">
                 </div>
             </div>
-
     </form>
+    <div class="input-group-btn" style="left:50%;">
+        <li><a href="{{ url_for('auth.signup') }}" class="btn btn-secondary btn-lg">Enregistrer un utilisateur</a></li>
+    </div>
+</div>
 
 {% endblock %}
 </html>

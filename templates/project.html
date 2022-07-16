@@ -10,6 +10,7 @@
     </script>
 
     {% block content %}
+<div class="container-fluid">
         <h1>{% block title %} Gestion de budget {% endblock %}</h1>
         <hr>
         <h2>
@@ -101,19 +102,21 @@
 
     <div class = "tab">
         <button class="tablinks" onClick="openTab('list', this)" id = "defaultOpen">Liste des transactions</button>
-        <button class="tablinks" onClick="openTab('graph', this)">Graphiques</button>
+        <button class="tablinks" onClick="openTab('graph', this)">Evolution</button>
+        <button class="tablinks" onClick="openTab('graph_cat', this)">Top catégories</button>
     </div>
 
     <div id="list" class="tabcontent">
-        <div class="col-sm-3">
-            <label for="autoSizingSelect" style="text-align:right;">Mois recherché :</label>
-            <select name="transaction_month" onchange="Search()" id = "selectedMonth" class = "selectpicker form-control" searchable = "Search..." style="width:auto;">
-                <option hidden disabled selected value>Sélectionner...</option>
-                {% for month in transaction_month %}
-                <option value="{{month[0]}}">{{month[0]}}</option>
-                {% endfor %}
-            </select>
-        </div>
+            <div class="col-sm-3">
+                <label for="autoSizingSelect" style="text-align:right;">Mois recherché :</label>
+                <select name="transaction_month" onChange="Search()" id = "selectedMonth" class = "selectpicker form-control" searchable = "Search..." style="width:auto;">
+                    <option hidden disabled selected value>Sélectionner...</option>
+                    {% for month in transaction_month %}
+                    <option value="{{month[0]}}">{{month[0]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
         <div style="height:300px; overflow-y: scroll;">
             <table id = "transactionsList" class="table table-light table-stripped">
                 <thead>
@@ -146,7 +149,23 @@
     <div id="graph" class = "tabcontent">
         <img src="{{url_for('static', filename='/images/'+ file_name + '.png')}}" style="height: 300px;border: none; ">
     </div>
-    
+    <div id="graph_cat" class = "tabcontent">
+        <div class="col-sm-3">
+            <label for="autoSizingSelect" style="text-align:right;">Mois recherché :</label>
+            <select name="transaction_month_cat" onchange="Send()" id = "selectedMonth_cat" class = "selectpicker form-control" searchable = "Search..." style="width:auto;">
+                <option hidden disabled selected value>Sélectionner...</option>
+                {% for month in transaction_month %}
+                <option value="{{month[0]}}">{{month[0]}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id='loader' style='display: none;' class="col-sm-3">
+            <a style="height: 300px;border: none; text-align:center">Please wait...</a>
+          </div>
+        <img id="img_cat" src="{{url_for('static', filename='/images/'+ file_name2 + '.png')}}" style="height: 300px;border: none; ">
+    </div>
+</div>    
+
 
 <script language="javascript">
 
@@ -179,7 +198,32 @@
 
         // Add the specific color to the button used to open the tab content
         elmnt.style.backgroundColor = color;
-        }
+        };
+        
+    function Send(){
+        obj = document.getElementById("selectedMonth_cat").value;
+        $.ajax({
+            url:window.location.href,
+            type:"post",
+            data: obj,
+            beforeSend: function(){
+                // Show image container
+                $("#loader").show();
+                $('#img_cat').hide();
+            },
+            success: function(response){
+                $("#loader").hide();
+                var img = document.getElementById("img_cat");
+                var timestamp = new Date().getTime();  
+                const url = new URL(img.src);
+                url.search = 'time=' + timestamp;
+                img.src = url.href;
+                img.src = img.src;
+                $('#img_cat').show();
+            }
+        })
+        // $.post(window.location.href, obj, (data, status) => console.log("Status: " + status));
+    };
 
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click(); 
