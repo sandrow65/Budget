@@ -3,8 +3,8 @@ import os
 
 def creation_BDD() :
     db_name = input('Database name ?')
-    print(os.getcwd() + '/' + db_name + '/' + db_name + '.db')
-    con = sqlite3.connect(os.getcwd() + '/' + db_name + '/' + db_name + '.db')
+    print(os.getcwd() + '/' + db_name + '/Budget.db')
+    con = sqlite3.connect(os.getcwd() + '/' + db_name + '/Budget.db')
 
     cur = con.cursor()
 
