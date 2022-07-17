@@ -61,7 +61,10 @@ def get_bars(project_name):
     filename = 'plot_data_' + str.replace(project_name, ' ', '_')
     url = cwd + '/static/images/{}.png'.format(filename)
     total_eco = int(df['Reste'].sum())
+<<<<<<< HEAD
     # plt.figure()
+=======
+>>>>>>> dd1f4c90230c739628dd48a475501958c3710ea4
     plt.title('Bilan des recettes-dépenses \n Total économisé : ' + str(total_eco) + ' €\n', color='white')
     plt.savefig(url, transparent=True, format='png')
     plt.clf()
@@ -70,6 +73,7 @@ def get_bars(project_name):
     con.close()
     return url, filename
 
+<<<<<<< HEAD
 def get_piechart(project_name, month = None):
 
     if month is None :
@@ -117,3 +121,5 @@ def get_piechart(project_name, month = None):
         con.close()
         
     return url, filename
+=======
+>>>>>>> dd1f4c90230c739628dd48a475501958c3710ea4

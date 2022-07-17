@@ -25,6 +25,10 @@
           <li class="active"><a href="{{ url_for('index') }}" class="navbar-item">Accueil</a></li>
           {% if not current_user.is_authenticated %}
           <li><a href="{{ url_for('auth.login') }}" class="navbar-item">Se connecter</a></li>
+<<<<<<< HEAD
+=======
+          <li><a href="{{ url_for('auth.signup') }}" class="navbar-item">S'enregistrer</a></li>
+>>>>>>> dd1f4c90230c739628dd48a475501958c3710ea4
           {% endif %}
           {% if current_user.is_authenticated %}
           <li><a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a></li>
