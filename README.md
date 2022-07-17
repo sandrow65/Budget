@@ -1,5 +1,7 @@
 # Application de gestion de budget
 
+Il faut avoir créé l'image et démarré le container pour pouvoir utiliser l'application ! (*build_run.sh* à exécuter)
+
 ## Interface de saisie
 ### Paramétrages à définir soi-même 
 - les catégories de transactions, exemple : Logement, Courses, Sorties, ...
