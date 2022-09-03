@@ -33,6 +33,7 @@ label {
 .items {
   display: flex;
   justify-content: space-between;
+  color:black;
 }
 .container { 
   /* display: flex;  */

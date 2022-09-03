@@ -125,6 +125,7 @@
                         <th scope = "col">Type</th>
                         <th scope = "col">Nom</th>
                         <th scope = "col">Destinataire</th>
+                        <th scope = "col">Catégorie</th>
                         <th scope = "col">Montant</th>
                         <!-- <th scope = "col">Destinara</th> -->
         
@@ -137,6 +138,7 @@
                             <td>{{transaction[4]}}</td>
                             <td>{{transaction[5]}}</td>
                             <td>{{transaction[8]}}</td>
+                            <td>{{transaction[3]}}</td>
                             <td>{{transaction[6]}}</td>
                         </tr>
                     {% endfor %}
@@ -149,7 +151,7 @@
     <div id="graph" class = "tabcontent">
         <img src="{{url_for('static', filename='/images/'+ file_name + '.png')}}" style="height: 300px;border: none; ">
     </div>
-<<<<<<< HEAD
+
     <div id="graph_cat" class = "tabcontent">
         <div class="col-sm-3">
             <label for="autoSizingSelect" style="text-align:right;">Mois recherché :</label>
@@ -167,9 +169,8 @@
     </div>
 </div>    
 
-=======
+
 </div>    
->>>>>>> dd1f4c90230c739628dd48a475501958c3710ea4
 
 <script language="javascript">
 

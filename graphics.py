@@ -61,10 +61,9 @@ def get_bars(project_name):
     filename = 'plot_data_' + str.replace(project_name, ' ', '_')
     url = cwd + '/static/images/{}.png'.format(filename)
     total_eco = int(df['Reste'].sum())
-<<<<<<< HEAD
+
     # plt.figure()
-=======
->>>>>>> dd1f4c90230c739628dd48a475501958c3710ea4
+
     plt.title('Bilan des recettes-dépenses \n Total économisé : ' + str(total_eco) + ' €\n', color='white')
     plt.savefig(url, transparent=True, format='png')
     plt.clf()
@@ -73,7 +72,13 @@ def get_bars(project_name):
     con.close()
     return url, filename
 
-<<<<<<< HEAD
+def make_autopct(values):
+    def my_autopct(pct):
+        total = sum(values)
+        val = int(round(pct*total/100.0))
+        return '{p:.1f}%\n({v:d}€)'.format(p=pct,v=val)
+    return my_autopct
+
 def get_piechart(project_name, month = None):
 
     if month is None :
@@ -89,7 +94,7 @@ def get_piechart(project_name, month = None):
 
         colors = sns.color_palette('flare', 10)
         # plt.figure()
-        plt.pie(transactions['Montant'], labels=transactions['Catégorie'], colors=colors, autopct='%.0f%%', textprops = {'color':'white'})
+        plt.pie(transactions['Montant'], labels=transactions['Catégorie'], colors=colors, autopct=make_autopct(transactions['Montant']), textprops = {'color':'white'})
         plt.title("Top 10 des dépenses sur la période", color='white')
         plt.savefig(url, transparent=True, format='png')
         plt.clf()
@@ -112,7 +117,7 @@ def get_piechart(project_name, month = None):
 
         colors = sns.color_palette('flare', 10)
         # plt.figure()
-        plt.pie(transactions_in_month['Montant'], labels=transactions_in_month['Catégorie'], colors=colors, autopct='%.0f%%', textprops = {'color':'white'})
+        plt.pie(transactions_in_month['Montant'], labels=transactions_in_month['Catégorie'], colors=colors, autopct=make_autopct(transactions_in_month['Montant']), textprops = {'color':'white'})
         plt.title("Top 10 des dépenses sur la période", color='white')
         plt.savefig(url, transparent=True, format='png')
         plt.clf()
@@ -121,5 +126,3 @@ def get_piechart(project_name, month = None):
         con.close()
         
     return url, filename
-=======
->>>>>>> dd1f4c90230c739628dd48a475501958c3710ea4
