@@ -1,6 +1,22 @@
 # Application de gestion de budget
 
-Il faut avoir créé l'image et démarré le container pour pouvoir utiliser l'application ! (*build_run.sh* à exécuter)
+## Pré-requis 
+### Fichier de configuration
+
+Créer le fichier de configuration dans le dossier *app*
+``` config.py
+HOST = 'db'
+USER = 'USER_NAME'
+PASSWORD = 'PASSWORD'
+DATABASE = 'BUDGET'
+
+SECRET_KEY = 'XXXX'
+```
+
+### Commandes Docker 
+- Contruire l'image docker : ```docker compose build``` (seulement la première fois ou en cas de changement dans les fichiers python)
+- Créer le container : ```docker compose up``` (ajouter ```-d``` à la fin pour le pas voir les logs)
+- Stopper le container : ```docker compose down```
 
 ## Interface de saisie
 ### Paramétrages à définir soi-même 
@@ -23,9 +39,16 @@ Différents champs à remplir :
 
 ## Sécurité
 - Nécessite d'avoir un compte pour rentrer dans l'application / consulter les données
-- Seul quelqu'un qui a accès à l'application peut ajouter un nouvel utilisateur
 
 ## Base de données 
-Deux BDD : 
-- Stockage des transactions
-- Stockage des utilisateurs
+### Une BDD : *BUDGET* 
+### Les tables (cf [db/db_creation.sql](https://github.com/sandrow65/Budget/blob/main/db/db_creation.sql)):
+
+- **USER** : liste les utilisateurs ayant créé un compte
+- **PROJECT** : liste tous les projets créés
+- **PROJECT_DATA** : liste toutes les transactions reliées à un projet
+- **TRANSACTION_TYPES** : paramétrable par l'utilisateur dans le bloc "Gérer")
+- **TRANSACTION_CLASSES** : paramétrable par l'utilisateur dans le bloc "Gérer")
+- **TRANSACTION_SENDER** : paramétrable par l'utilisateur dans le bloc "Gérer")
+- **TRANSACTION_RECIPIENT** : paramétrable par l'utilisateur dans le bloc "Gérer")
+
