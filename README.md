@@ -4,7 +4,10 @@
 ### Fichier de configuration
 
 Créer le fichier de configuration dans le dossier *app*
-``` config.py
+``` 
+####### config.py #######
+
+
 HOST = 'db'
 USER = 'USER_NAME'
 PASSWORD = 'PASSWORD'
