@@ -23,7 +23,6 @@ Différents champs à remplir :
 
 ## Sécurité
 - Nécessite d'avoir un compte pour rentrer dans l'application / consulter les données
-- Seul quelqu'un qui a accès à l'application peut ajouter un nouvel utilisateur
 
 ## Base de données 
 ### Une BDD : *BUDGET* 
