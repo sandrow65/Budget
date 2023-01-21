@@ -1,6 +1,22 @@
 # Application de gestion de budget
 
-Il faut avoir créé l'image et démarré le container pour pouvoir utiliser l'application ! (*build_run.sh* à exécuter)
+## Pré-requis 
+### Fichier de configuration
+
+Créer le fichier de configuration dans le dossier *app*
+``` config.py
+HOST = 'db'
+USER = 'USER_NAME'
+PASSWORD = 'PASSWORD'
+DATABASE = 'BUDGET'
+
+SECRET_KEY = 'XXXX'
+```
+
+### Commandes Docker 
+- Contruire l'image docker : ```docker compose build``` (seulement la première fois ou en cas de changement dans les fichiers python)
+- Créer le container : ```docker compose up``` (ajouter ```-d``` à la fin pour le pas voir les logs)
+- Stopper le container : ```docker compose down```
 
 ## Interface de saisie
 ### Paramétrages à définir soi-même 
