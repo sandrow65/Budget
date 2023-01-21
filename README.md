@@ -15,7 +15,7 @@ SECRET_KEY = 'XXXX'
 
 ### Commandes Docker 
 - Contruire l'image docker : ```docker compose build``` (seulement la première fois ou en cas de changement dans les fichiers python)
-- Créer le container : ```docker compose up``` (ajouter ```-d``` à la fin pour le pas voir les logs)
+- Créer le container : ```docker compose up``` (ajouter ```-d``` à la fin pour ne pas voir les logs)
 - Stopper le container : ```docker compose down```
 
 ## Interface de saisie
