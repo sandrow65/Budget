@@ -98,6 +98,8 @@ def register():
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
             cursor.execute('SELECT MAX(IDX) FROM USER')
             max_idx_user = cursor.fetchone()[0]
+            if max_idx_user is None :
+                max_idx_user = 0
             cursor.execute('INSERT INTO USER VALUES (%s, %s, %s, %s)', (max_idx_user + 1, username, password, email))
             msg = 'You have successfully registered!'
         con.commit()
