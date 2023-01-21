@@ -1,4 +1,3 @@
 ./db/Budget.db
-./db_users/users.sqlite
-./dbLouison/dbLouison.db
-./images/*.png
+./db/dump_mysql.sql
+./app/config.py

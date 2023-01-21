@@ -22,16 +22,12 @@
     <nav class="nav flex-column navbar-dark ">
       <div class="container-fluid">
         <ul class="nav flex-column">
-          <li class="active"><a href="{{ url_for('index') }}" class="navbar-item">Accueil</a></li>
-          {% if not current_user.is_authenticated %}
-          <li><a href="{{ url_for('auth.login') }}" class="navbar-item">Se connecter</a></li>
-
-          <li><a href="{{ url_for('auth.signup') }}" class="navbar-item">S'enregistrer</a></li>
-
-          {% endif %}
-          {% if current_user.is_authenticated %}
-          <li><a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a></li>
-          {% endif %}
+          <li class="btn btn-secondary btn-lg" ><a href="{{ url_for('home') }}" class="navbar-item">Accueil</a></li>
+        </ul>
+      </div>
+      <div class="container-fluid">
+        <ul class="nav flex-column">
+          <li class="btn btn-secondary btn-lg"  ><a href="{{ url_for('logout') }}" class="navbar-item">Se déconnecter</a></li>
         </ul>
       </div>
     </nav>

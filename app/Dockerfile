@@ -11,7 +11,6 @@ RUN locale-gen fr_FR.UTF-8
 ENV LANG fr_FR.UTF-8
 ENV LANGUAGE fr_FR:fr
 ENV LC_ALL fr_FR.UTF-8
-VOLUME /db
 
 COPY . .
 
