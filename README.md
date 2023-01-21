@@ -27,13 +27,13 @@ Différents champs à remplir :
 
 ## Base de données 
 ### Une BDD : *BUDGET* 
-### Les tables (cf **db/db_creation.sql**):
+### Les tables (cf [db/db_creation.sql](https://github.com/sandrow65/Budget/blob/main/db/db_creation.sql):
 
-- *USER* : liste les utilisateurs ayant créé un compte
-- *PROJECT* : liste tous les projets créés
-- *PROJECT_DATA* : liste toutes les transactions reliées à un projet
-- *TRANSACTION_TYPES' 
-- *TRANSACTION_CLASSES' 
-- *TRANSACTION_SENDER' 
-- *TRANSACTION_RECIPIENT' 
+- **USER** : liste les utilisateurs ayant créé un compte
+- **PROJECT** : liste tous les projets créés
+- **PROJECT_DATA** : liste toutes les transactions reliées à un projet
+- **TRANSACTION_TYPES**
+- **TRANSACTION_CLASSES** 
+- **TRANSACTION_SENDER**
+- **TRANSACTION_RECIPIENT**
 
