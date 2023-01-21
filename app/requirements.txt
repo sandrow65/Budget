@@ -1,0 +1,7 @@
+matplotlib
+pandas
+seaborn
+flask
+flask-login
+flask_mysqldb
+mysql-connector-python
