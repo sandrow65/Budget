@@ -26,6 +26,14 @@ Différents champs à remplir :
 - Seul quelqu'un qui a accès à l'application peut ajouter un nouvel utilisateur
 
 ## Base de données 
-Deux BDD : 
-- Stockage des transactions
-- Stockage des utilisateurs
+### Une BDD : *BUDGET* 
+### Les tables (cf **db/db_creation.sql**):
+
+- *USER* : liste les utilisateurs ayant créé un compte
+- *PROJECT* : liste tous les projets créés
+- *PROJECT_DATA* : liste toutes les transactions reliées à un projet
+- *TRANSACTION_TYPES' 
+- *TRANSACTION_CLASSES' 
+- *TRANSACTION_SENDER' 
+- *TRANSACTION_RECIPIENT' 
+
