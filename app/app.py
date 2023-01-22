@@ -22,6 +22,9 @@ app.config['MYSQL_PASSWORD'] = config.PASSWORD
 app.config['MYSQL_DB'] = config.DATABASE
 app.secret_key = config.SECRET_KEY
 
+
+print('test print 1')
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
@@ -113,6 +116,8 @@ def register():
 
 @app.route('/home', methods=('GET', 'POST'))
 def home():
+    print('blablabla',flush=True)
+    print(os.getcwd())
     # Check if user is loggedin
     if 'loggedin' in session:
         project_list = navigation.list_projects()
@@ -128,7 +133,7 @@ def home():
             elif request.form['submit_button'] == 'Gérer' : 
                 return redirect(url_for('admin'))
             else :
-                pass
+                return redirect(url_for('home'))
 
         return render_template('home.html', projects = project_list, username=session['username'])
     else :

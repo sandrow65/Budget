@@ -1,3 +1,4 @@
 db/Budget.db
-db/dump_mysql.sql
+db/dump_*
 app/config.py
+app/static/images

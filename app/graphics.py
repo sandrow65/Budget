@@ -31,8 +31,7 @@ def get_bars(project_name):
     cur.execute(sql, (project_name, 'Débit'))
     negative_transactions = pd.DataFrame(cur.fetchall(), columns = ['Date', 'Dépenses'])
 
-    url =""
-    filename = ""
+    print('get_bars cwd : ', os.getcwd(), flush=True)
 
     df = pd.concat([positive_transactions, negative_transactions], axis=0)
 
@@ -82,6 +81,10 @@ def get_bars(project_name):
 
         con.commit()
         con.close()
+    else :
+        url =""
+        filename = ""
+
     return url, filename
 
 def make_autopct(values):
@@ -92,8 +95,7 @@ def make_autopct(values):
     return my_autopct
 
 def get_piechart(project_name, month = None):
-    filename = ""
-    url = ""
+    
     if month is None :
         con = mysql.connector.connect(
                 host = config.HOST,
@@ -120,6 +122,9 @@ def get_piechart(project_name, month = None):
 
             con.commit()
             con.close()
+        else : 
+            filename = ""
+            url = ""
         
     else :
 
@@ -133,12 +138,15 @@ def get_piechart(project_name, month = None):
                 )
         cur = con.cursor()
 
-        sql = '''SELECT CLASS, SUM(VALUE) FROM PROJECT_DATA WHERE PROJECT_NAME = %s AND TYPE = %s AND cast(strftime('%m', DATE) as int) = %i AND cast(strftime('%Y', DATE) as int) = %i GROUP BY CLASS ORDER BY SUM(VALUE) DESC LIMIT 10'''
+        sql = '''SELECT CLASS, SUM(VALUE) FROM PROJECT_DATA WHERE PROJECT_NAME = %s AND TYPE = %s AND MONTH(DATE) = %s AND YEAR(DATE) = %s GROUP BY CLASS ORDER BY SUM(VALUE) DESC LIMIT 10'''
         cur.execute(sql, (project_name, 'Débit', int(month_date_object.month), int(month_date_object.year)))
         transactions_in_month = pd.DataFrame(cur.fetchall(), columns = ['Catégorie', 'Montant'])
         
-        if not transactions.empty :
+        if not transactions_in_month.empty :
             cwd = os.getcwd()
+            os.chdir(cwd + '/app')
+            cwd = os.getcwd()
+            print("CURRENT WD : ", cwd)
             filename = 'plot_categories_' + str.replace(project_name, ' ', '_')
             url = cwd + '/static/images/{}.png'.format(filename)
 
@@ -151,5 +159,8 @@ def get_piechart(project_name, month = None):
 
             con.commit()
             con.close()
+        else :
+            filename = ""
+            url = ""
         
     return url, filename
