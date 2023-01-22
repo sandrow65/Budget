@@ -21,6 +21,10 @@ SECRET_KEY = 'XXXX'
 - Créer le container : ```docker compose up``` (ajouter ```-d``` à la fin pour ne pas voir les logs)
 - Stopper le container : ```docker compose down```
 
+(Facultatif)
+- Création du volume backup : ```docker volume create mysql-db-backup```
+- Exécuter le script [auto_backup.ps1](https://github.com/sandrow65/Budget/blob/main/auto_backup.ps1)
+
 ## Interface de saisie
 ### Paramétrages à définir soi-même 
 - les catégories de transactions, exemple : Logement, Courses, Sorties, ...
@@ -44,7 +48,7 @@ Différents champs à remplir :
 - Nécessite d'avoir un compte pour rentrer dans l'application / consulter les données
 
 ## Base de données 
-### Une BDD *mysql*: *BUDGET* 
+### Une BDD *MySQL*: **BUDGET**
 ### Les tables (cf [db/db_creation.sql](https://github.com/sandrow65/Budget/blob/main/db/db_creation.sql)):
 
 - **USER** : liste les utilisateurs ayant créé un compte
