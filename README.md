@@ -5,6 +5,9 @@
 
 Créer le fichier de configuration dans le dossier *app*
 ``` config.py
+####### config.py #######
+
+
 HOST = 'db'
 USER = 'USER_NAME'
 PASSWORD = 'PASSWORD'
@@ -14,8 +17,8 @@ SECRET_KEY = 'XXXX'
 ```
 
 ### Commandes Docker 
-- Contruire l'image docker : ```docker compose build``` (seulement la première fois ou en cas de changement dans les fichiers python)
-- Créer le container : ```docker compose up``` (ajouter ```-d``` à la fin pour le pas voir les logs)
+- Contruire l'image docker : ```docker compose build``` (seulement la première fois ou en cas de changement dans les fichiers *Python*)
+- Créer le container : ```docker compose up``` (ajouter ```-d``` à la fin pour ne pas voir les logs)
 - Stopper le container : ```docker compose down```
 
 ## Interface de saisie
@@ -41,7 +44,7 @@ Différents champs à remplir :
 - Nécessite d'avoir un compte pour rentrer dans l'application / consulter les données
 
 ## Base de données 
-### Une BDD : *BUDGET* 
+### Une BDD *mysql*: *BUDGET* 
 ### Les tables (cf [db/db_creation.sql](https://github.com/sandrow65/Budget/blob/main/db/db_creation.sql)):
 
 - **USER** : liste les utilisateurs ayant créé un compte
