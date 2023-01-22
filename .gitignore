@@ -1,4 +1,4 @@
 db/Budget.db
 db/dump_*
 app/config.py
-app/static/images
+app/static/images/*.png
