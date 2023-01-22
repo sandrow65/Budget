@@ -120,12 +120,12 @@ def home():
     print(os.getcwd())
     # Check if user is loggedin
     if 'loggedin' in session:
-        project_list = navigation.list_projects()
+        project_list = navigation.list_projects(session['username'])
 
         if request.method == 'POST':
             if request.form['submit_button'] == 'Créer':
                 project_name = request.form['new_project']
-                navigation.add_project(project_name)
+                navigation.add_project(project_name, session['username'])
                 return redirect(url_for('project', project_name = str(project_name)))
             elif request.form['submit_button'] == 'Sélectionner':
                 project_name = request.form['project']
@@ -144,12 +144,12 @@ def home():
 @app.route('/home/project', defaults={'project_name': None}) 
 def project(project_name):
 
-    transaction_types, transaction_classes, transaction_senders, transaction_recipients = navigation.get_params()
+    transaction_types, transaction_classes, transaction_senders, transaction_recipients = navigation.get_params(session['username'])
 
-    transaction_list = navigation.get_project_data(project_name)
-    transaction_month = navigation.get_timelapse(project_name)
-    url, filename = graphics.get_bars(project_name)
-    url_cat, filename_cat = graphics.get_piechart(project_name)
+    transaction_list = navigation.get_project_data(project_name, session['username'])
+    transaction_month = navigation.get_timelapse(project_name, session['username'])
+    url, filename = graphics.get_bars(project_name, session['username'])
+    url_cat, filename_cat = graphics.get_piechart(project_name, session['username'])
     form_keys = list(request.form.to_dict().keys())
     if request.method == 'POST':
         if 'submit_button' in form_keys:
@@ -161,10 +161,10 @@ def project(project_name):
                 transaction_recipient = request.form['transaction_recipient']
                 transaction_name = request.form['transaction_name']
                 transaction_value = request.form['transaction_value']
-                navigation.add_transaction(project_name, transaction_date, transaction_name, transaction_type, transaction_class, transaction_sender, transaction_recipient, transaction_value)
+                navigation.add_transaction(project_name, transaction_date, transaction_name, transaction_type, transaction_class, transaction_sender, transaction_recipient, transaction_value, session['username'])
         else :
             selected_month = form_keys[0]
-            url_cat, filename_cat = graphics.get_piechart(project_name, selected_month)
+            url_cat, filename_cat = graphics.get_piechart(project_name, session['username'], selected_month)
 
     return render_template('project.html', project_name = project_name, transaction_list = transaction_list, transaction_month = transaction_month, \
         transaction_types = transaction_types, transaction_classes = transaction_classes, \
@@ -176,16 +176,16 @@ def admin():
     if request.method in ('POST'):
         if request.form['submit_button'] == "Ajouter le type":
             new_type = request.form["new_type"]
-            navigation.add_param('type', new_type)
+            navigation.add_param('type', new_type, session['username'])
         elif request.form['submit_button'] == "Ajouter la catégorie":
             new_class = request.form["new_class"]
-            navigation.add_param('class', new_class)
+            navigation.add_param('class', new_class, session['username'])
         elif request.form['submit_button'] == "Ajouter le destinataire":
             new_recipient = request.form["new_recipient"]
-            navigation.add_param('recipient', new_recipient)
+            navigation.add_param('recipient', new_recipient, session['username'])
         elif request.form['submit_button'] == "Ajouter l'expéditeur":
             new_sender = request.form["new_sender"]
-            navigation.add_param('sender', new_sender)
+            navigation.add_param('sender', new_sender, session['username'])
         redirect(url_for('home'))
     return render_template('admin.html')
 

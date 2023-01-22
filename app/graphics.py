@@ -17,7 +17,7 @@ sns.set(font_scale=7)
 
 
 
-def get_bars(project_name):
+def get_bars(project_name, username):
     con = mysql.connector.connect(
             host = config.HOST,
             user = config.USER,
@@ -25,13 +25,11 @@ def get_bars(project_name):
             database = config.DATABASE
         )
     cur = con.cursor()
-    sql = '''SELECT DATE, VALUE FROM PROJECT_DATA WHERE PROJECT_NAME = %s AND TYPE = %s ORDER BY DATE'''
-    cur.execute(sql, (project_name, 'Crédit'))
+    sql = '''SELECT DATE, VALUE FROM PROJECT_DATA WHERE PROJECT_NAME = %s AND TYPE = %s AND CREATOR = %s ORDER BY DATE'''
+    cur.execute(sql, (project_name, 'Crédit', username))
     positive_transactions = pd.DataFrame(cur.fetchall(), columns = ['Date', 'Recettes'])
-    cur.execute(sql, (project_name, 'Débit'))
+    cur.execute(sql, (project_name, 'Débit', username))
     negative_transactions = pd.DataFrame(cur.fetchall(), columns = ['Date', 'Dépenses'])
-
-    print('get_bars cwd : ', os.getcwd(), flush=True)
 
     df = pd.concat([positive_transactions, negative_transactions], axis=0)
 
@@ -94,7 +92,7 @@ def make_autopct(values):
         return '{p:.1f}%\n({v:d}€)'.format(p=pct,v=val)
     return my_autopct
 
-def get_piechart(project_name, month = None):
+def get_piechart(project_name, username, month = None):
     
     if month is None :
         con = mysql.connector.connect(
@@ -105,8 +103,8 @@ def get_piechart(project_name, month = None):
             )
         cur = con.cursor()
 
-        sql = '''SELECT CLASS, SUM(VALUE) FROM PROJECT_DATA WHERE PROJECT_NAME = %s AND TYPE = %s GROUP BY CLASS ORDER BY SUM(VALUE) DESC LIMIT 10'''
-        cur.execute(sql, (project_name, 'Débit'))
+        sql = '''SELECT CLASS, SUM(VALUE) FROM PROJECT_DATA WHERE PROJECT_NAME = %s AND TYPE = %s AND CREATOR = %s GROUP BY CLASS ORDER BY SUM(VALUE) DESC LIMIT 10'''
+        cur.execute(sql, (project_name, 'Débit', username))
         transactions = pd.DataFrame(cur.fetchall(), columns = ['Catégorie', 'Montant'])
         if not transactions.empty :
             cwd = os.getcwd()
@@ -138,15 +136,12 @@ def get_piechart(project_name, month = None):
                 )
         cur = con.cursor()
 
-        sql = '''SELECT CLASS, SUM(VALUE) FROM PROJECT_DATA WHERE PROJECT_NAME = %s AND TYPE = %s AND MONTH(DATE) = %s AND YEAR(DATE) = %s GROUP BY CLASS ORDER BY SUM(VALUE) DESC LIMIT 10'''
-        cur.execute(sql, (project_name, 'Débit', int(month_date_object.month), int(month_date_object.year)))
+        sql = '''SELECT CLASS, SUM(VALUE) FROM PROJECT_DATA WHERE PROJECT_NAME = %s AND TYPE = %s AND MONTH(DATE) = %s AND YEAR(DATE) = %s AND CREATOR = %s GROUP BY CLASS ORDER BY SUM(VALUE) DESC LIMIT 10'''
+        cur.execute(sql, (project_name, 'Débit', int(month_date_object.month), int(month_date_object.year), username))
         transactions_in_month = pd.DataFrame(cur.fetchall(), columns = ['Catégorie', 'Montant'])
         
         if not transactions_in_month.empty :
             cwd = os.getcwd()
-            os.chdir(cwd + '/app')
-            cwd = os.getcwd()
-            print("CURRENT WD : ", cwd)
             filename = 'plot_categories_' + str.replace(project_name, ' ', '_')
             url = cwd + '/static/images/{}.png'.format(filename)
 
